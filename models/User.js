@@ -11,16 +11,26 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    artistName: {
+    artist_name: {
       type: String,
       required: true,
     },
-    profileImg: String,
-    city: String,
-    country: String,
+    profile_img: String,
+    location: {
+      city: String,
+      country: String,
+    },
     samples: [{type: Schema.Types.ObjectId, ref: "Sample"}],
-
-
+    packs: [{type: Schema.Types.ObjectId, ref: "Pack"}],
+    // collections: [{type: Schema.Types.ObjectId, ref: "Collection"}],
+    reposts: [{type: Schema.Types.ObjectId, ref: "Repost"}],
+    followers: [{type: Schema.Types.ObjectId, ref: "User"}],
+    following: [{type: Schema.Types.ObjectId, ref: "User"}],
+    bio: String,
+    social_links:{
+      social_media_platform: String,
+      social_media_link: String
+    }
   },
   {
     timeseries: true,
