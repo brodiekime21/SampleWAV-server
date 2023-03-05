@@ -30,6 +30,10 @@ const userSchema = new Schema(
     social_links:{
       social_media_platform: String,
       social_media_link: String
+    },
+    created_at: {
+      type: Date,
+      default: Date.now
     }
   },
   {
