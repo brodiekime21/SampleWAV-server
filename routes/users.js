@@ -6,6 +6,7 @@ const User = require('../models/User')
 /* GET users listing. */
 router.get('/profile/:userId', (req, res, next) => {
   User.findById(req.params.userId)
+    .populate('users')
     .populate('samples')
     .populate('packs')
     .then((foundUser) => {
