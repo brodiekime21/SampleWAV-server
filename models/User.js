@@ -15,7 +15,11 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    profile_img: String,
+    profile_image: {
+      type: String,
+      default: "https://res.cloudinary.com/dc6w7a0c8/image/upload/v1676491556/movie-project/profile-pic_ynoyug.png"
+
+    },
     location: {
       city: String,
       country: String,

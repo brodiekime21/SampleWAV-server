@@ -18,7 +18,10 @@ const sampleSchema = new Schema(
     bpm: Number,
     type: String,
     artist_name: String,
-    sample_img: String,
+    sample_image: {
+      type: String,
+      default: "https://res.cloudinary.com/dc6w7a0c8/image/upload/v1678113724/SampleWAV/sound-placeholder_chg2tr.png"
+    },
     pack: [{type: Schema.Types.ObjectId, ref: "Pack"}],
     number_of_samples: Number,
     number_of_reposts: Number,
