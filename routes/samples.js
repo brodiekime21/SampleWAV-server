@@ -1,63 +1,101 @@
 const express = require('express');
 const router = express.Router();
 const Sample = require('../models/Sample');
+import getSample from '../middleware/getSample';
 
-const fileUploader = require('../config/cloudinary.config')
+const fileUploader = require('../config/cloudinary.config');
 
 
-router.post('/samples', async (req, res) => {
+
+router.post('/create-sample', fileUploader.single('sample_image'),isAuthenticated, async (req, res) => {
+  const {
+    sample_file,
+    sample_name,
+    music_tags,
+    instrument,
+    genres,
+    key,
+    bpm,
+    type,
+    artist_name,
+    sample_image,
+    pack,
+  } = req.body;
+
   try {
-    const sample = new Sample(req.body);
-    const savedSample = await sample.save();
-    res.status(201).json(savedSample);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const sample = await Sample.create({
+      creator: req.user._id,
+      sample_file,
+      sample_name,
+      music_tags,
+      instrument,
+      genres,
+      key,
+      bpm,
+      type,
+      artist_name,
+      sample_image,
+      pack,
+    });
+
+    res.json(sample);
+  } catch (error) {
+    res.json({ message: error.message });
   }
 });
 
-router.get('/samples', async (req, res) => {
+router.get('/browse-samples', async (req, res) => {
   try {
     const samples = await Sample.find();
-    res.status(200).json(samples);
+    res.json(samples);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json({ message: err.message });
   }
 });
 
-router.get('/samples/:id', getSample, (req, res) => {
-  res.status(200).json(res.sample);
-});
+router.put('/edit-sample/:id', fileUploader.single('sample_image'), getSample, async (req, res) => {
+  const {
+    sample_file,
+    sample_name,
+    music_tags,
+    instrument,
+    genres,
+    key,
+    bpm,
+    type,
+    artist_name,
+    sample_image,
+    pack,
+  } = req.body;
 
-router.put('/samples/:id', getSample, async (req, res) => {
   try {
-    const updatedSample = await res.sample.set(req.body).save();
-    res.status(200).json(updatedSample);
+    const updatedSample = await res.sample.set({
+      sample_file,
+      sample_name,
+      music_tags,
+      instrument,
+      genres,
+      key,
+      bpm,
+      type,
+      artist_name,
+      sample_image,
+      pack,
+    }).save();
+    
+    res.json(updatedSample);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.json({ message: err.message });
   }
 });
 
-router.delete('/samples/:id', getSample, async (req, res) => {
+router.delete('/sample/:id', getSample, async (req, res) => {
   try {
     await res.sample.remove();
-    res.status(204).send();
+    res.send();
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.json({ message: err.message });
   }
 });
-
-// Middleware function to get a Sample by ID
-async function getSample(req, res, next) {
-  try {
-    const sample = await Sample.findById(req.params.id);
-    if (sample == null) {
-      return res.status(404).json({ message: 'Cannot find Sample' });
-    }
-    res.sample = sample;
-    next();
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-}
 
 module.exports = router;

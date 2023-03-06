@@ -3,10 +3,12 @@ const router = express.Router();
 
 const User = require('../models/User');
 const fileUploader = require('../config/cloudinary.config');
+const isAuthenticated = require('../middleware/isAuthenticated')
 
-router.get('/profile/:userId', async (req, res, next) => {
+
+router.get('/profile/:id', async (req, res, next) => {
   try {
-    const foundUser = await User.findById(req.params.userId)
+    const foundUser = await User.findById(req.params.id)
       .populate('samples')
       .populate('packs')
       .populate('reposts')
@@ -18,13 +20,13 @@ router.get('/profile/:userId', async (req, res, next) => {
   }
 });
 
-router.put('/edit-profile/:userId', async (req, res, next) => {
+router.post('/edit-profile/:id', isAuthenticated ,fileUploader.single('profile_image'), async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.userId,
+      req.params.id,
       {
         artist_name: req.body.artist_name,
-        // profile_image: req.body.profile_image,
+        profile_image: req.body.profile_image,
         // location: req.body.location,
         // age: req.body.age,
         // bio: req.body.bio,
