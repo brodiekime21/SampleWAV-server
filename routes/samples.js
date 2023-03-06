@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Sample = require('../models/Sample');
-import getSample from '../middleware/getSample';
-
+const getSample = require('../middleware/getSample') ;
+const isAuthenticated = require('../middleware/isAuthenticated')
 const fileUploader = require('../config/cloudinary.config');
 
 
@@ -43,6 +43,29 @@ router.post('/create-sample', fileUploader.single('sample_image'),isAuthenticate
     res.json({ message: error.message });
   }
 });
+
+router.post('/new-sample', fileUploader.single('sample'), async (req, res, next) => {
+  res.json({profileImage: req.file.path})
+    console.log("File", req.file)
+// try {
+//   // const { artist_name } = req.body;
+//   // const { path } = req.file;
+  
+//   const result = await fileUploader.single(req.file.path, { folder: 'SampleWAV' });
+//   // const updatedUser = await User.findByIdAndUpdate(
+    
+//   //   req.params.id,
+//   //   {
+//   //     artist_name,
+//   //     profile_image: result.secure_url,
+//   //   },
+//   //   { new: true }
+//   // );
+//   // res.json({profile_image: result.secure_url});
+// } catch (err) {
+//   console.log(err);
+// }
+})
 
 router.get('/browse-samples', async (req, res) => {
   try {

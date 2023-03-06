@@ -50,13 +50,13 @@ router.post("/login", async (req, res, next) => {
         _id: foundUser._id,
         email: foundUser.email,
         artist_name: foundUser.artist_name,
-        profile_image: foundUser.profile_image,
-        location: foundUser.location,
-        samples: foundUser.samples
+        // profile_image: foundUser.profile_image,
+        // location: foundUser.location,
+        // samples: foundUser.samples
       };
       const token = jwt.sign(payload, process.env.SECRET, {
         algorithm: "HS256",
-        expiresIn: "24hr",
+        expiresIn: "168hr",
       });
       res.json({ token: token, _id: foundUser._id, message: `Welcome ${foundUser.artist_name}` });
     } else {
