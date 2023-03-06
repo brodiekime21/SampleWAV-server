@@ -45,7 +45,7 @@ router.post('/create-sample', fileUploader.single('sample_image'),isAuthenticate
 });
 
 router.post('/new-sample', fileUploader.single('sample'), async (req, res, next) => {
-  res.json({profileImage: req.file.path})
+  res.json({sample: req.file.path})
     console.log("File", req.file)
 // try {
 //   // const { artist_name } = req.body;
