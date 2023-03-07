@@ -2,16 +2,14 @@ const { Schema, model } = require("mongoose");
 
 const packSchema = new Schema(
   {
-    creator: [{type: Schema.Types.ObjectId, ref: "User"}],
+    creator: {type: Schema.Types.ObjectId, ref: "User"},
     samples: [{type: Schema.Types.ObjectId, ref: "Sample"}],
     pack_name: {
       type: String,
       required: true
     },
-    music_tags: [String],
     instruments: [String],
     genres: [String],
-    artist_name: String,
     pack_image: String,
     number_of_samples: Number,
     number_of_reposts: Number,
