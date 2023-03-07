@@ -7,7 +7,7 @@ const fileUploader = require('../config/cloudinary.config');
 
 
 
-router.post('/create-sample', fileUploader.single('sample_image'),isAuthenticated, async (req, res) => {
+router.post('/create-sample',isAuthenticated, async (req, res) => {
   const {
     sample_file,
     sample_name,
@@ -44,27 +44,14 @@ router.post('/create-sample', fileUploader.single('sample_image'),isAuthenticate
   }
 });
 
-router.post('/new-sample', fileUploader.single('sample'), async (req, res, next) => {
-  res.json({sample: req.file.path})
+router.post('/new-sample-file', fileUploader.single('sampleFile'), async (req, res, next) => {
+  res.json({sampleFile: req.file.path})
     console.log("File", req.file)
-// try {
-//   // const { artist_name } = req.body;
-//   // const { path } = req.file;
-  
-//   const result = await fileUploader.single(req.file.path, { folder: 'SampleWAV' });
-//   // const updatedUser = await User.findByIdAndUpdate(
-    
-//   //   req.params.id,
-//   //   {
-//   //     artist_name,
-//   //     profile_image: result.secure_url,
-//   //   },
-//   //   { new: true }
-//   // );
-//   // res.json({profile_image: result.secure_url});
-// } catch (err) {
-//   console.log(err);
-// }
+})
+
+router.post('/new-sample-image', fileUploader.single('sampleImage'), async (req, res, next) => {
+  res.json({sampleImage: req.file.path})
+    console.log("File", req.file)
 })
 
 router.get('/browse-samples', async (req, res) => {

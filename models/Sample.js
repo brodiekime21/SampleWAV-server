@@ -11,7 +11,6 @@ const sampleSchema = new Schema(
       type: String,
       required: true
     },
-    music_tags: [String],
     instrument: String,
     genres: [String],
     key: String,
@@ -26,6 +25,10 @@ const sampleSchema = new Schema(
     number_of_reposts: Number,
     number_of_downloads: Number,
     length_of_sample: Number, //will be rounded to closes second
+    created_at: {
+      type: Date,
+      default: Date.now
+    },
   },
   {
     timeseries: true,
