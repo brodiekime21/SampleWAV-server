@@ -10,10 +10,7 @@ var cors = require('cors')
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var sampleRouter = require('./routes/samples')
-
-
-
-
+var packRouter = require('./routes/packs')
 
 var app = express();
 
@@ -35,6 +32,7 @@ app.use(
 app.use('/auth', authRouter);
 app.use('/users', usersRouter);
 app.use('/samples', sampleRouter)
+app.use('/packs', packRouter)
 
 
 app.use(function (req, res, next) {

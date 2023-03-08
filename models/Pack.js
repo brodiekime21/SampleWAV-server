@@ -11,9 +11,12 @@ const packSchema = new Schema(
     instruments: [String],
     genres: [String],
     pack_image: String,
-    number_of_samples: Number,
     number_of_reposts: Number,
     number_of_downloads: Number,
+    created_at: {
+      type: Date,
+      default: Date.now
+    },
   },
   {
     timeseries: true,

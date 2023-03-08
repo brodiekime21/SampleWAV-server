@@ -13,7 +13,6 @@ router.post('/create-sample', isAuthenticated, fileUploader.single('sample_file'
   const {
     sample_file,
     sample_name,
-    music_tags,
     instrument,
     genres,
     key,
@@ -30,7 +29,6 @@ router.post('/create-sample', isAuthenticated, fileUploader.single('sample_file'
       creator: req.user._id,
       sample_file,
       sample_name,
-      music_tags,
       instrument,
       genres,
       key,
@@ -79,7 +77,7 @@ router.get('/browse-samples', async (req, res) => {
 //   const {
 //     sample_file,
 //     sample_name,
-//     music_tags,
+//    
 //     instrument,
 //     genres,
 //     key,
@@ -94,7 +92,7 @@ router.get('/browse-samples', async (req, res) => {
 //     const updatedSample = await res.sample.set({
 //       sample_file,
 //       sample_name,
-//       music_tags,
+//  
 //       instrument,
 //       genres,
 //       key,
