@@ -5,9 +5,11 @@ const getSample = require('../middleware/getSample') ;
 const isAuthenticated = require('../middleware/isAuthenticated')
 const fileUploader = require('../config/cloudinary.config');
 
+const User = require('../models/User')
 
 
-router.post('/create-sample',isAuthenticated, async (req, res) => {
+
+router.post('/create-sample', isAuthenticated, fileUploader.single('sample_file'), async (req, res) => {
   const {
     sample_file,
     sample_name,
@@ -23,6 +25,7 @@ router.post('/create-sample',isAuthenticated, async (req, res) => {
   } = req.body;
 
   try {
+    console.log("user testing", req.user)
     const sample = await Sample.create({
       creator: req.user._id,
       sample_file,
@@ -37,8 +40,16 @@ router.post('/create-sample',isAuthenticated, async (req, res) => {
       sample_image,
       pack,
     });
+    console.log("sample testing", sample)
 
-    res.json(sample);
+    await User.findByIdAndUpdate(req.user._id, {$push: {samples: sample._id}}, {new: true, runValidators: true})
+      .then((udpatedUser) => {
+        console.log("populating")
+        return udpatedUser.populate('samples')
+      })
+      .then((populated) => {
+        res.json(populated)
+      })
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -63,49 +74,73 @@ router.get('/browse-samples', async (req, res) => {
   }
 });
 
-router.put('/edit-sample/:id', fileUploader.single('sample_image'), getSample, async (req, res) => {
-  const {
-    sample_file,
-    sample_name,
-    music_tags,
-    instrument,
-    genres,
-    key,
-    bpm,
-    type,
-    artist_name,
-    sample_image,
-    pack,
-  } = req.body;
 
-  try {
-    const updatedSample = await res.sample.set({
-      sample_file,
-      sample_name,
-      music_tags,
-      instrument,
-      genres,
-      key,
-      bpm,
-      type,
-      artist_name,
-      sample_image,
-      pack,
-    }).save();
+// router.put('/edit-sample/:id', fileUploader.single('sample_image'), getSample, async (req, res) => {
+//   const {
+//     sample_file,
+//     sample_name,
+//     music_tags,
+//     instrument,
+//     genres,
+//     key,
+//     bpm,
+//     type,
+//     artist_name,
+//     sample_image,
+//     pack,
+//   } = req.body;
+
+//   try {
+//     const updatedSample = await res.sample.set({
+//       sample_file,
+//       sample_name,
+//       music_tags,
+//       instrument,
+//       genres,
+//       key,
+//       bpm,
+//       type,
+//       artist_name,
+//       sample_image,
+//       pack,
+//     }).save();
     
-    res.json(updatedSample);
-  } catch (err) {
-    res.json({ message: err.message });
+//     res.json(updatedSample);
+//   } catch (err) {
+//     res.json({ message: err.message });
+//   }
+// });
+
+
+
+router.get('/delete/:id', isAuthenticated, async (req, res) => {
+  console.log(req.user._id)
+  try {
+    const sample = await Sample.findById(req.params.id);
+    if (String(req.user._id) === String(sample.creator)) {
+      
+      await Sample.deleteOne(sample);
+      
+      await User.findByIdAndUpdate(
+        req.user._id,
+        { $pull: { samples: sample._id } },
+        { new: true, runValidators: true }
+      ).then((updatedUser) => {
+        return updatedUser.populate('samples')
+      })
+      .then((populated) => {
+        res.json(populated)
+      });
+      // return res.status(200).json({ msg: "deleted successfully! :)" });
+    } else {
+      return res.status(401).json({ msg: "unauthorized" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
   }
 });
 
-router.delete('/sample/:id', getSample, async (req, res) => {
-  try {
-    await res.sample.remove();
-    res.send();
-  } catch (err) {
-    res.json({ message: err.message });
-  }
-});
+
 
 module.exports = router;

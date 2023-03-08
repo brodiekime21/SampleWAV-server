@@ -17,8 +17,7 @@ const userSchema = new Schema(
     },
     profile_image: {
       type: String,
-      default: "https://res.cloudinary.com/dc6w7a0c8/image/upload/v1678128122/SampleWAV/profile-pic_q4t7w0.png"
-
+      default: "https://res.cloudinary.com/dc6w7a0c8/image/upload/v1678223756/SampleWAV/blank-profile_gztpuo.webp"
     },
     city: {
       type: String,
@@ -27,7 +26,8 @@ const userSchema = new Schema(
     country: {
       type: String,
       default: 'country',
-    },    samples: [{type: Schema.Types.ObjectId, ref: "Sample"}],
+    },    
+    samples: [{type: Schema.Types.ObjectId, ref: "Sample"}],
     packs: [{type: Schema.Types.ObjectId, ref: "Pack"}],
     // collections: [{type: Schema.Types.ObjectId, ref: "Collection"}],
     reposts: [{type: Schema.Types.ObjectId, ref: "Repost"}],

@@ -45,25 +45,16 @@ router.post('/edit-profile/:id', isAuthenticated , fileUploader.single('profile_
 router.post('/new-profile-photo', fileUploader.single('profileImage'), async (req, res, next) => {
     res.json({profileImage: req.file.path})
       console.log("File", req.file)
-  // try {
-  //   // const { artist_name } = req.body;
-  //   // const { path } = req.file;
-    
-  //   const result = await fileUploader.single(req.file.path, { folder: 'SampleWAV' });
-  //   // const updatedUser = await User.findByIdAndUpdate(
-      
-  //   //   req.params.id,
-  //   //   {
-  //   //     artist_name,
-  //   //     profile_image: result.secure_url,
-  //   //   },
-  //   //   { new: true }
-  //   // );
-  //   // res.json({profile_image: result.secure_url});
-  // } catch (err) {
-  //   console.log(err);
-  // }
 })
+
+router.get('/users-samples', isAuthenticated, async (req, res) => {
+  try {
+    const samples = await Sample.find();
+    res.json(samples);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
 
 // router.post('/edit-profile/:id', isAuthenticated, fileUploader.single('profile_image'), async (req, res, next) => {
 //   try {
