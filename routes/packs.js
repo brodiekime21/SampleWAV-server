@@ -11,7 +11,8 @@ const User = require('../models/User')
 
 //havent done anything here yet
 
-router.post('/create-pack', isAuthenticated, fileUploader.single('pack_image'), async (req, res) => {
+router.post('/create-pack', isAuthenticated, async (req, res) => {
+  console.log("this is req.body",req.body)
   const {
     samples,
     pack_name,
@@ -48,11 +49,6 @@ router.post('/create-pack', isAuthenticated, fileUploader.single('pack_image'), 
     res.json({ message: error.message });
   }
 });
-
-// router.post('/new-sample-file', fileUploader.single('sampleFile'), async (req, res, next) => {
-//   res.json({sampleFile: req.file.path})
-//     console.log("File", req.file)
-// })
 
 router.post('/new-pack-image', fileUploader.single('packImage'), async (req, res, next) => {
   res.json({packImage: req.file.path})

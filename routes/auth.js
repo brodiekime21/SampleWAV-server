@@ -70,7 +70,7 @@ router.post("/login", async (req, res, next) => {
 router.get("/verify", isAuthenticated, (req, res) => {
   User.findOne({_id: req.user._id})
   .populate('samples')
-  // .populate('packs')
+  .populate('packs')
   // .populate('reposts')
   // .populate('followers')
   // .populate('following')
