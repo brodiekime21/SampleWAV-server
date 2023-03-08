@@ -64,6 +64,16 @@ router.get('/browse-packs', async (req, res) => {
   }
 });
 
+router.get('/pack-details/:id', async (req, res) => {
+  try {
+    const pack = await Pack.findById(req.params.id).populate('creator').populate('samples');
+    res.json(pack);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+});
+
+
 
 // router.put('/edit-sample/:id', fileUploader.single('sample_image'), getSample, async (req, res) => {
 //   const {
