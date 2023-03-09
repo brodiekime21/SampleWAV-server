@@ -57,7 +57,7 @@ router.post('/new-pack-image', fileUploader.single('packImage'), async (req, res
 
 router.get('/browse-packs', async (req, res) => {
   try {
-    const packs = await Pack.find();
+    const packs = await Pack.find().populate('packs');
     res.json(packs);
   } catch (err) {
     res.json({ message: err.message });
