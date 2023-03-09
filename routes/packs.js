@@ -12,6 +12,8 @@ const User = require('../models/User')
 //havent done anything here yet
 
 router.post('/create-pack', isAuthenticated, async (req, res) => {
+  const result = await fileUploader.uploader.upload(req.body.file, { resource_type: "auto" });
+
   console.log("this is req.body",req.body)
   const {
     samples,
@@ -34,6 +36,7 @@ router.post('/create-pack', isAuthenticated, async (req, res) => {
       pack_image,
       number_of_reposts,
       number_of_downloads,
+      fileUrl: result.url
     });
     console.log("pack testing", pack)
 

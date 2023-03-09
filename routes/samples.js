@@ -9,7 +9,9 @@ const User = require('../models/User')
 
 
 
-router.post('/create-sample', isAuthenticated, fileUploader.single('sample_file'), async (req, res) => {
+router.post('/create-sample', isAuthenticated, async (req, res) => {
+  const result = await fileUploader.uploader.upload(req.body.file, { resource_type: "auto" });
+
   const {
     sample_file,
     sample_name,
@@ -37,6 +39,8 @@ router.post('/create-sample', isAuthenticated, fileUploader.single('sample_file'
       artist_name,
       sample_image,
       pack,
+      fileUrl: result.url
+
     });
     console.log("sample testing", sample)
 
@@ -72,6 +76,15 @@ router.get('/browse-samples', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const sample = await Sample.findById(req.params.id);
+  const fileStream = fileUploader.uploader.download(sample.fileUrl);
+  res.set({
+    'Content-Disposition': `attachment; filename="${sample.sample_name}.wav"`,
+    'Content-Type': 'audio/mpeg'
+  });
+  fileStream.pipe(res);
+});
 
 // router.put('/edit-sample/:id', fileUploader.single('sample_image'), getSample, async (req, res) => {
 //   const {
