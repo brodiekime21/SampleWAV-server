@@ -67,7 +67,10 @@ router.post('/new-sample-image', fileUploader.single('sampleImage'), async (req,
 
 router.get('/browse-samples', async (req, res) => {
   try {
+    console.log(samples)
     const samples = await Sample.find().populate('samples');
+    console.log(samples)
+
     res.json(samples);
   } catch (err) {
     res.json({ message: err.message });
