@@ -19,15 +19,16 @@ app.enable('trust proxy');
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URI,
+    credentials: true,  // <== URL of our future React app
+  })
+);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(
-    cors({
-      origin: [process.env.FRONTEND_URI]  
-    })
-);
 
 // app.use(
 //   cors()

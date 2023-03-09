@@ -7,6 +7,8 @@ processes = []
 
 [env]
   PORT = "8080"
+  FRONTEND_URI = "https://samplewav.netlify.app"
+  SECRET = "dummyword"
 
 [experimental]
   auto_rollback = true
