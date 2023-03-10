@@ -20,7 +20,6 @@ const packSchema = new Schema(
       type: Date,
       default: Date.now
     },
-    fileUrl: String,
   },
   {
     timeseries: true,

@@ -66,9 +66,10 @@ router.post('/new-sample-image', fileUploader.single('sampleImage'), async (req,
 })
 
 router.get('/browse-samples', async (req, res) => {
+  console.log("this is line 69!!!", Sample)
   try {
-    console.log(samples)
-    const samples = await Sample.find().populate('samples');
+
+    const samples = await Sample.find().populate('creator');
     console.log(samples)
 
     res.json(samples);
@@ -77,7 +78,7 @@ router.get('/browse-samples', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id/download', async (req, res) => {
   const sample = await Sample.findById(req.params.id);
   const fileStream = fileUploader.uploader.download(sample.sample_file);
   res.set({
@@ -137,9 +138,7 @@ router.get('/delete/:id', isAuthenticated, async (req, res) => {
         req.user._id,
         { $pull: { samples: sample._id } },
         { new: true, runValidators: true }
-      ).then((updatedUser) => {
-        return updatedUser.populate('samples')
-      })
+      )
       .then((populated) => {
         res.json(populated)
       });

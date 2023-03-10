@@ -14,7 +14,10 @@ const sampleSchema = new Schema(
     instrument: String,
     genres: [String],
     key: String,
-    bpm: Number,
+    bpm: {
+      type: Number,
+      default: 0,
+    },
     type: String,
     sample_image: {
       type: String,
@@ -28,7 +31,6 @@ const sampleSchema = new Schema(
       type: Date,
       default: Date.now
     },
-    fileUrl: String,
   },
   {
     timeseries: true,

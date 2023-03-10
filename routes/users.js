@@ -20,7 +20,7 @@ router.get('/profile/:id', async (req, res, next) => {
   }
 });
 
-router.post('/edit-profile/:id', isAuthenticated , fileUploader.single('profile_image'), async (req, res, next) => {
+router.post('/edit-profile/:id', isAuthenticated , async (req, res, next) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -37,6 +37,15 @@ router.post('/edit-profile/:id', isAuthenticated , fileUploader.single('profile_
       { new: true }
     );
     res.json(updatedUser);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.get('/', async (req, res, next) => {
+  try {
+    const users = await User.find().select('artist_name profile_image');
+    res.json(users);
   } catch (err) {
     console.log(err);
   }
@@ -75,6 +84,34 @@ router.get('/users-samples', isAuthenticated, async (req, res) => {
 //     console.log(err);
 //   }
 
+
+router.get('/delete/:id', isAuthenticated, async (req, res) => {
+  console.log(req.user._id)
+  try {
+    const user = await User.findById(req.params.id);
+    if (String(req.user._id) === String(user._id)) {
+      
+      await User.deleteOne(user);
+      
+      // await User.findByIdAndUpdate(
+      //   req.user._id,
+      //   { $pull: { users: user._id } },
+      //   { new: true, runValidators: true }
+      // ).then((updatedUser) => {
+      //   return updatedUser.populate('samples')
+      // })
+      // .then((populated) => {
+      //   res.json(populated)
+      // });
+      // return res.status(200).json({ msg: "deleted successfully! :)" });
+    } else {
+      return res.status(401).json({ msg: "unauthorized" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
 
 
 module.exports = router;

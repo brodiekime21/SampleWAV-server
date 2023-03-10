@@ -38,9 +38,9 @@ router.post('/create-pack', isAuthenticated, async (req, res) => {
     console.log("pack testing", pack)
 
     await User.findByIdAndUpdate(req.user._id, {$push: {packs: pack._id}}, {new: true, runValidators: true})
-      .then((udpatedUser) => {
+      .then((updatedUser) => {
         console.log("populating")
-        return udpatedUser.populate('packs')
+        return updatedUser.populate('packs')
       })
       .then((populated) => {
         res.json(populated)
@@ -57,7 +57,7 @@ router.post('/new-pack-image', fileUploader.single('packImage'), async (req, res
 
 router.get('/browse-packs', async (req, res) => {
   try {
-    const packs = await Pack.find().populate('packs');
+    const packs = await Pack.find().populate('creator');
     res.json(packs);
   } catch (err) {
     res.json({ message: err.message });
