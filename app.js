@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: process.env.FRONTEND_URI,
-    credentials: true,  // <== URL of our future React app
+    credentials: true,
   })
 );
 app.use(express.urlencoded({ extended: false }));
