@@ -26,7 +26,7 @@ const sampleSchema = new Schema(
     pack: {type: Schema.Types.ObjectId, ref: "Pack"},
     number_of_reposts: Number,
     number_of_downloads: Number,
-    length_of_sample: Number, //will be rounded to closes second
+    length_of_sample: Number,
     created_at: {
       type: Date,
       default: Date.now
